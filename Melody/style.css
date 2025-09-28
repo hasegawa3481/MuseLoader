@@ -410,7 +410,7 @@ section:hover {
 .score-container {
   background: var(--bg-primary);
   border-radius: var(--border-radius-md);
-  padding: 1.5rem;
+  padding: 0.5rem; /* 여백 줄임 */
   min-height: 200px;
   border: 1px solid var(--border-color);
   display: flex;
