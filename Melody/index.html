@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>음계 측정기 2.0 (자유 채보)</title>
+  <title>음계 측정기 2.1 (자유 채보)</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/vexflow@3.0.9/releases/vexflow-min.js"></script>
 </head>
+
 <body>
   <div class="container">
     <header>
-      <h1>음계 측정기 2.0</h1>
+      <h1>음계 측정기 2.1</h1>
       <p class="subtitle">실시간 음성 분석 · 자유 채보 · 메트로놈</p>
     </header>
 
@@ -106,8 +108,14 @@
           <div class="control-group">
             <label>정렬 단위</label>
             <div>
-              <label><input type="radio" name="lyrMode" value="syllable" checked /> 음절</label>
-              <label style="margin-left:1rem;"><input type="radio" name="lyrMode" value="word" /> 어절</label>
+              <label>
+                <input type="radio" name="lyrMode" value="syllable" checked />
+                <span>음절</span>
+              </label>
+              <label style="margin-left:1rem;">
+                <input type="radio" name="lyrMode" value="word" />
+                <span>어절</span>
+              </label>
             </div>
           </div>
           <div class="control-group">
@@ -132,7 +140,7 @@
 
     <footer>
       <a href="https://instagram.com/rei_tuyu" target="_blank">
-        @rei_tuyu - 음계 측정기 2.0
+        @NodeLink
       </a>
     </footer>
   </div>
@@ -140,4 +148,5 @@
   <audio id="metronomeSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
   <script src="script.js"></script>
 </body>
+
 </html>

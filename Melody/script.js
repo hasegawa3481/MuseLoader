@@ -397,10 +397,10 @@ window.onload = () => {
     const candidates = [
       { name: "32", sec: Q / 8 },
       { name: "16", sec: Q / 4 },
-      { name: "8",  sec: Q / 2 },
-      { name: "q",  sec: Q },
-      { name: "h",  sec: 2 * Q },
-      { name: "w",  sec: 4 * Q },
+      { name: "8", sec: Q / 2 },
+      { name: "q", sec: Q },
+      { name: "h", sec: 2 * Q },
+      { name: "w", sec: 4 * Q },
     ];
     let best = candidates[0];
     let minErr = Math.abs(dSec - candidates[0].sec);
@@ -588,62 +588,92 @@ window.onload = () => {
   };
 
   // ===== Main Audio Processing =====
+  let isRunning = false; // track start/stop state
+
   startBtn.onclick = async () => {
-    try {
-      updateStatus("마이크 권한 요청 중...", 'loading');
+    if (!isRunning) {
+      // ===== START =====
+      try {
+        updateStatus("마이크 권한 요청 중...", 'loading');
 
-      if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioContext.state === "suspended") await audioContext.resume();
+        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === "suspended") await audioContext.resume();
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      microphone = audioContext.createMediaStreamSource(stream);
-      analyser = audioContext.createAnalyser();
-      analyser.fftSize = 2048;
-      analyser.smoothingTimeConstant = 0.0; // keep flux responsive
-      scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1);
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        microphone = audioContext.createMediaStreamSource(stream);
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 2048;
+        analyser.smoothingTimeConstant = 0.0;
+        scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1);
 
-      microphone.connect(analyser);
-      analyser.connect(scriptProcessor);
-      scriptProcessor.connect(audioContext.destination);
+        microphone.connect(analyser);
+        analyser.connect(scriptProcessor);
+        scriptProcessor.connect(audioContext.destination);
 
-      scriptProcessor.onaudioprocess = () => {
-        const arrayTD = new Float32Array(analyser.fftSize);
-        analyser.getFloatTimeDomainData(arrayTD);
+        scriptProcessor.onaudioprocess = () => {
+          const arrayTD = new Float32Array(analyser.fftSize);
+          analyser.getFloatTimeDomainData(arrayTD);
 
-        // Free transcription path
-        if (freeModeOn) {
-          const now = audioContext.currentTime;
-          processOnsetAndPitch(arrayTD, now);
-        } else {
-          // Legacy pitch panel updates (even if not free mode)
-          const pitch = autoCorrelate(arrayTD, audioContext.sampleRate);
-          if (pitch !== -1) {
-            pitchHistory.push(pitch);
-            if (pitchHistory.length > maxHistory) pitchHistory.shift();
-            const avgPitch = weightedAverage(pitchHistory);
-            const noteName = frequencyToNote(avgPitch);
-            pitchDiv.textContent = noteName;
-            doremiDiv.textContent = getDoremi(noteName);
-            octaveDiv.textContent = getOctave(noteName);
-            frequencyDiv.textContent = `${avgPitch.toFixed(2)} Hz`;
-            updateStatus("🎵 음성 분석 중");
+          if (freeModeOn) {
+            const now = audioContext.currentTime;
+            processOnsetAndPitch(arrayTD, now);
           } else {
-            pitchDiv.textContent = "--";
-            doremiDiv.textContent = "--";
-            octaveDiv.textContent = "--";
-            frequencyDiv.textContent = "-- Hz";
-            updateStatus("🎤 음성 대기 중");
+            const pitch = autoCorrelate(arrayTD, audioContext.sampleRate);
+            if (pitch !== -1) {
+              pitchHistory.push(pitch);
+              if (pitchHistory.length > maxHistory) pitchHistory.shift();
+              const avgPitch = weightedAverage(pitchHistory);
+              const noteName = frequencyToNote(avgPitch);
+              pitchDiv.textContent = noteName;
+              doremiDiv.textContent = getDoremi(noteName);
+              octaveDiv.textContent = getOctave(noteName);
+              frequencyDiv.textContent = `${avgPitch.toFixed(2)} Hz`;
+              updateStatus("🎵 음성 분석 중");
+            } else {
+              pitchDiv.textContent = "--";
+              doremiDiv.textContent = "--";
+              octaveDiv.textContent = "--";
+              frequencyDiv.textContent = "-- Hz";
+              updateStatus("🎤 음성 대기 중");
+            }
           }
-        }
-      };
+        };
 
-      startBtn.disabled = true;
-      startBtn.innerHTML = '<span class="btn-icon">✅</span>분석 중';
-      updateStatus("🎵 마이크 활성화 완료");
+        // update button state
+        startBtn.innerHTML = '<span class="btn-icon">⏹️</span>종료하기';
+        startBtn.classList.add("running");
+        updateStatus("🎵 마이크 활성화 완료");
+        isRunning = true;
 
-    } catch (err) {
-      updateStatus("❌ 마이크 권한이 거부되었습니다");
-      console.error("마이크 접근 오류:", err);
+      } catch (err) {
+        updateStatus("❌ 마이크 권한이 거부되었습니다");
+        console.error("마이크 접근 오류:", err);
+      }
+
+    } else {
+      // ===== STOP =====
+      if (scriptProcessor) {
+        scriptProcessor.disconnect();
+        scriptProcessor = null;
+      }
+      if (analyser) {
+        analyser.disconnect();
+        analyser = null;
+      }
+      if (microphone) {
+        microphone.disconnect();
+        microphone = null;
+      }
+      if (audioContext && audioContext.state !== "closed") {
+        audioContext.close();
+        audioContext = null;
+      }
+
+      // update button state
+      startBtn.innerHTML = '<span class="btn-icon">🎤</span>시작하기';
+      startBtn.classList.remove("running");
+      updateStatus("🛑 분석 종료됨");
+      isRunning = false;
     }
   };
-};
+}
