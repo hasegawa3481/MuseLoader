@@ -1,4 +1,5 @@
 // script.js
+// script.js
 window.onload = () => {
   const VF = Vex.Flow;
 
@@ -210,6 +211,8 @@ window.onload = () => {
     const renderer = new VF.Renderer(outputDiv, VF.Renderer.Backends.SVG);
     renderer.resize(600, 180);
     const context = renderer.getContext();
+    context.setFillStyle("#FFFFFF"); // 흰색으로 설정
+    context.setStrokeStyle("#FFFFFF"); // 흰색으로 설정
     const stave = new VF.Stave(10, 40, 580);
     stave.addClef("treble").addTimeSignature(timeSignature);
     stave.setContext(context).draw();
@@ -240,6 +243,8 @@ window.onload = () => {
     const renderer = new VF.Renderer(outputDiv, VF.Renderer.Backends.SVG);
     renderer.resize(900, 220);
     const context = renderer.getContext();
+    context.setFillStyle("#FFFFFF"); // 흰색으로 설정
+    context.setStrokeStyle("#FFFFFF"); // 흰색으로 설정
     const stave = new VF.Stave(10, 40, 880);
     stave.addClef("treble").addTimeSignature(timeSignature);
     stave.setContext(context).draw();
@@ -298,6 +303,8 @@ window.onload = () => {
     const renderer = new VF.Renderer(outputDiv, VF.Renderer.Backends.SVG);
     renderer.resize(600, 160);
     const context = renderer.getContext();
+    context.setFillStyle("#FFFFFF"); // 흰색으로 설정
+    context.setStrokeStyle("#FFFFFF"); // 흰색으로 설정
     const stave = new VF.Stave(10, 40, 580);
     stave.addClef("treble").addTimeSignature(timeSignature);
     stave.setContext(context).draw();
