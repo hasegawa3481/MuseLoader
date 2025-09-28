@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>음계 측정기 2.0 (자유 채보)</title>
+  <title>음계 측정기 2.1.1 (자유 채보)</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/vexflow@3.0.9/releases/vexflow-min.js"></script>
 </head>
+
 <body>
   <div class="container">
     <header>
-      <h1>음계 측정기 2.0</h1>
+      <h1>음계 측정기 2.1.1</h1>
       <p class="subtitle">실시간 음성 분석 · 자유 채보 · 메트로놈</p>
     </header>
 
     <main class="main-content">
-      <!-- 시작 버튼 -->
       <section class="control-section">
         <button id="startBtn" class="primary-btn">
           <span class="btn-icon">🎤</span>
@@ -23,7 +24,6 @@
         </button>
       </section>
 
-      <!-- 음성 분석 결과 -->
       <section class="analysis-panel">
         <div class="analysis-grid">
           <div class="analysis-item">
@@ -45,7 +45,6 @@
         </div>
       </section>
 
-      <!-- 메트로놈 컨트롤 -->
       <section class="metronome-section">
         <div class="section-header">
           <h2>메트로놈 설정</h2>
@@ -80,7 +79,6 @@
         </div>
       </section>
 
-      <!-- 박자 설정 -->
       <section class="time-signature-section">
         <div class="section-header">
           <h2>박자 설정</h2>
@@ -93,7 +91,6 @@
         </div>
       </section>
 
-      <!-- 가사 입력 -->
       <section class="lyrics-section">
         <div class="section-header">
           <h2>가사 입력</h2>
@@ -103,20 +100,25 @@
             <label for="lyricsInput">가사</label>
             <input id="lyricsInput" type="text" placeholder="예) 안녕하세요" />
           </div>
-          <div class="control-group">
+          <div class="control-group control-group-center">
             <label>정렬 단위</label>
             <div>
-              <label><input type="radio" name="lyrMode" value="syllable" checked /> 음절</label>
-              <label style="margin-left:1rem;"><input type="radio" name="lyrMode" value="word" /> 어절</label>
+              <label>
+                <input type="radio" name="lyrMode" value="syllable" checked />
+                <span>음절</span>
+              </label>
+              <label style="margin-left:1rem;">
+                <input type="radio" name="lyrMode" value="word" />
+                <span>어절</span>
+              </label>
             </div>
           </div>
           <div class="control-group">
-            <button id="loadLyricsBtn" class="secondary-btn">가사 로드</button>
+            <button id="loadLyricsBtn" class="primary-btn">가사 로드</button>
           </div>
         </div>
       </section>
 
-      <!-- 악보 출력 -->
       <section class="score-section">
         <div class="section-header">
           <h2>실시간 악보</h2>
@@ -124,7 +126,6 @@
         <div id="output" class="score-container"></div>
       </section>
 
-      <!-- 상태 표시 -->
       <section class="status-section">
         <div id="status" class="status-indicator">시작 버튼을 눌러 활성화</div>
       </section>
@@ -132,7 +133,7 @@
 
     <footer>
       <a href="https://instagram.com/rei_tuyu" target="_blank">
-        @rei_tuyu - 음계 측정기 2.0
+        @NodeLink
       </a>
     </footer>
   </div>
@@ -140,4 +141,5 @@
   <audio id="metronomeSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
   <script src="script.js"></script>
 </body>
+
 </html>
