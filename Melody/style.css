@@ -134,6 +134,7 @@ section:hover {
 .secondary-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
   font-size: 1.1rem;
@@ -188,13 +189,12 @@ section:hover {
 .secondary-btn {
   background: var(--bg-tertiary);
   color: var(--text-primary);
-  border: 1x solid var(--border-color);
+  border: 1px solid var(--border-color);
 }
 
 .secondary-btn:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
+  background: var(--bg-tertiary);
+  border-color: var(--accent-tertiary);
 }
 
 .btn-icon {
